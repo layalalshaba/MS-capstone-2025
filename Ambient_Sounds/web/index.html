@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Meditations on the Effects of Technology</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      color: #000;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3em;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 2.4em;
+      margin: 0 0 20px 0;
+      font-weight: 600;
+      background: linear-gradient(to right, #7A4DE6, #2DAEF2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    button {
+      font-size: 1.5em;
+      padding: 15px 40px;
+      border: none;
+      cursor: pointer;
+      background-color: #FFD600;
+      color: black;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #444;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="title">Meditations on the effects of technology on</h1>
+  <h2 class="subtitle">social bonds (Ambient sounds)</h2>
+
+
+
+  <audio id="sound" src="sound.mp3"></audio>
+  <!--<button onclick="sound.play()">Play Sound</button>-->
+
+  <button onclick="sound.currentTime = 0; sound.play()">Play Sound</button>
+
+
+  <div class="status" id="status">Connecting to ESP32...</div>
+
+  <script>
+    const sound = document.getElementById('sound');
+    const statusEl = document.getElementById('status');
+
+    //const socket = new WebSocket('ws://10.0.0.209:81');
+
+    const socket = new WebSocket("ws://10.19.137.54:81");
+
+
+
+
+    socket.onopen = () => {
+      statusEl.textContent = 'Connected to ESP32 ✅';
+    };
+
+    socket.onmessage = (event) => {
+      if (event.data === 'play') {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    };
+
+    socket.onerror = () => {
+      statusEl.textContent = 'WebSocket error ❌';
+    };
+
+    socket.onclose = () => {
+      statusEl.textContent = 'WebSocket disconnected 🚫';
+    };
+  </script>
+
+
+
+
+</body>
+
+</html>
